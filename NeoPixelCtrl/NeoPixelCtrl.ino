@@ -21,7 +21,7 @@ void DebugBlink(unsigned int num);
 #define RCV_SIZE (3+NUMPIXELS*4) //CheckSum:2byte BrigthNess:1byte LEDCtrl:4byte
 byte    rcvData[RCV_SIZE];
 #define RCV_LOOP (RCV_SIZE*1000)/(BAUDRATE/8)+10 //RCV_SIZE 受信するのにかかる時間
-
+bool    oneShot = false;
 //protocol
 //[CHECKSUM1][CHECKSUM2][BRIGHTNESS][CH1][CH1R][CH1G][CH1B][CH2][CH2R][CH2G][CH2B]...
 
@@ -45,6 +45,13 @@ void setup() {
 void loop() {
   //all off
   pixels.clear();
+
+  //reset
+  for ( int i = 0; i < NUMPIXELS; i++)
+  {
+    pixels.setPixelColor(i, pixels.Color(0, 0, 0));
+  }
+  pixels.show();
 
   //serial
   while (1)
@@ -106,12 +113,12 @@ void loop() {
 
         //to NeoPixel
         pixels.setBrightness(rcvData[2]);
-                
+
         int chIndex = 3;
         for ( int i = 0; i < NUMPIXELS; i++)
         {
           pixels.setPixelColor(rcvData[chIndex], pixels.Color(rcvData[chIndex + 1], rcvData[chIndex + 2], rcvData[chIndex + 3])); //1
-          chIndex+=4;
+          chIndex += 4;
         }
         pixels.show();
       }
@@ -121,10 +128,8 @@ void loop() {
       }
 
       //プログラム側でchecksum結果を確認する場合
-      /*
-        Serial.write(isOK);
-        Serial.flush();
-      */
+      Serial.write(isOK);
+      Serial.flush();
     }
   }
 }

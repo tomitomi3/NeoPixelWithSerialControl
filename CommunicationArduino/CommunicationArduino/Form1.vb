@@ -96,6 +96,22 @@ Public Class frmMain
             End SyncLock
 
             Thread.Sleep(50)
+
+            'rush test
+            Me.Invoke(
+                        Sub()
+                            If _runTest = True Then
+                                _sendData.Clear()
+                                Dim split = Me.tbxSendMessage.Text.Split(",")
+                                For Each temp In split
+                                    _sendData.Add(Byte.Parse(temp))
+                                Next
+                                _sendData(0) = trkBar.Value
+
+                                SendArduinoWithCheckSum()
+                            End If
+                        End Sub
+                        )
         End While
     End Sub
 
@@ -130,9 +146,7 @@ Public Class frmMain
         Next
 
         'debug
-        Console.WriteLine("SendSize:{0}", allSendByte.Count)
-        Console.WriteLine("CheckSum :{0}", sumSize)
-        Console.WriteLine("CheckSum & 0xFF:{0}", sumSize And &HFF)
+        Console.WriteLine("SendSize:{0} CheckSum :{1}", allSendByte.Count, sumSize)
         For i As Integer = 0 To allSendByte.Count - 1
             Console.Write("{0} ", allSendByte(i))
         Next
@@ -147,6 +161,8 @@ Public Class frmMain
         If oSerialPort.IsOpen Then
             'thread stop
             myThread.Abort()
+
+            System.Threading.Thread.Sleep(100)
 
             'close
             oSerialPort.Close()
@@ -228,17 +244,28 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub btnTest_Click(sender As Object, e As EventArgs) Handles btnTest.Click
-        For i As Integer = 0 To 50
-            _sendData.Clear()
-            Dim split = Me.tbxSendMessage.Text.Split(",")
-            For Each temp In split
-                _sendData.Add(Byte.Parse(temp))
-            Next
-            _sendData(0) = trkBar.Value
+    Private _runTest = False
 
-            SendArduinoWithCheckSum()
-        Next
+    Private Sub btnTest_Click(sender As Object, e As EventArgs) Handles btnTest.Click
+        If _runTest = True Then
+            _runTest = False
+        Else
+            _runTest = True
+        End If
+
+        'For i As Integer = 0 To 1000 - 1
+        '    _sendData.Clear()
+        '    Dim split = Me.tbxSendMessage.Text.Split(",")
+        '    For Each temp In split
+        '        _sendData.Add(Byte.Parse(temp))
+        '    Next
+        '    _sendData(0) = trkBar.Value
+
+        '    SendArduinoWithCheckSum()
+
+        '    'window messageの処理
+        '    'Application.DoEvents()
+        'Next
     End Sub
 
     Private Sub TarckBarCtrl(ByVal series As Integer, ByVal value As Integer)

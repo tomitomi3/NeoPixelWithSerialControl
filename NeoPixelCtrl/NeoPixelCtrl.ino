@@ -63,7 +63,7 @@ void loop() {
       Clear();
 
       //最大RCV_SIZE分読み込む
-      unsigned int chkSum = 0;
+      unsigned int chkSumRcv = 0;
       int readCount = 0;
       for (int i = 0; i < RCV_LOOP; i++)
       {
@@ -79,12 +79,11 @@ void loop() {
             byte temp  = Serial.read();
             rcvData[readCount] = temp;
 
-            //先頭2バイトはチェックサム
+            //2バイト移行を加算
             if (readCount >= 2)
             {
-              chkSum += temp;
+              chkSumRcv += temp;
             }
-
             readCount++;
             if (readCount == RCV_SIZE)
             {
@@ -103,10 +102,10 @@ void loop() {
         delay(1000);
       */
 
-      //checksumを比較して正しければLED制御
-      bool isOK = true;
-      unsigned int rcvSumSize = (rcvData[1] << 8) | rcvData[0];
-      if ( rcvSumSize == chkSum)
+      //checksum確認 加算して0であればOK
+      unsigned char flg = 0;
+      chkSumRcv +=  (rcvData[1] << 8) | rcvData[0];
+      if ( chkSumRcv == 0)
       {
         //debug
         DebugBlink(1);
@@ -121,14 +120,11 @@ void loop() {
           chIndex += 4;
         }
         pixels.show();
-      }
-      else
-      {
-        isOK = false;
+        flg = 1;
       }
 
       //プログラム側でchecksum結果を確認する場合
-      Serial.write(isOK);
+      Serial.write(flg);
       Serial.flush();
     }
   }

@@ -164,11 +164,12 @@ Public Class frmMain
             Return
         End If
 
-        'check sum
+        'calc checksum
         Dim sumSize As UInt16 = 0
         For i As Integer = 0 To _sendData.Count - 1
             sumSize += _sendData(i)
         Next
+        sumSize = (Not sumSize) + 1
         Dim chkSumByte = BitConverter.GetBytes(sumSize)
 
         'add checksum

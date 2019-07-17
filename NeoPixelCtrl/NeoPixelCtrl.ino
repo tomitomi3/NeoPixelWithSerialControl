@@ -20,7 +20,7 @@ void DebugBlink(unsigned int num);
 //vars
 #define RCV_SIZE (3+NUMPIXELS*4) //CheckSum:2byte BrigthNess:1byte LEDCtrl:4byte
 byte    rcvData[RCV_SIZE];
-#define RCV_LOOP (RCV_SIZE*1000)/(BAUDRATE/8)+10 //RCV_SIZE 受信するのにかかる時間
+#define RCV_LOOP (RCV_SIZE*1000)/(BAUDRATE/8)*1.5 //RCV_SIZE 受信するのにかかる時間
 bool    oneShot = false;
 //protocol
 //[CHECKSUM1][CHECKSUM2][BRIGHTNESS][CH1][CH1R][CH1G][CH1B][CH2][CH2R][CH2G][CH2B]...
@@ -60,7 +60,7 @@ void loop() {
     if (Serial.available() > 0)
     {
       //data clear
-      Clear();
+      memset(rcvData, 0, RCV_SIZE);
 
       //最大RCV_SIZE分読み込む
       unsigned int chkSumRcv = 0;
@@ -84,6 +84,8 @@ void loop() {
             {
               chkSumRcv += temp;
             }
+
+            //RCV_SIZE分
             readCount++;
             if (readCount == RCV_SIZE)
             {
@@ -125,16 +127,8 @@ void loop() {
 
       //プログラム側でchecksum結果を確認する場合
       Serial.write(flg);
-      Serial.flush();
+      //Serial.flush();
     }
-  }
-}
-
-void Clear()
-{
-  for (int i = 0; i < RCV_SIZE; i++)
-  {
-    rcvData[i] = 0;
   }
 }
 

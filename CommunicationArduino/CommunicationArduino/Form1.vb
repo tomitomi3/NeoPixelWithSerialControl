@@ -135,7 +135,7 @@ Public Class frmMain
                 End If
             End SyncLock
 
-            Thread.Sleep(50)
+            Thread.Sleep(10)
 
             'rush test
             Me.Invoke(
@@ -189,7 +189,8 @@ Public Class frmMain
 
         'write
         oSerialPort.Write(allSendByte.ToArray, 0, allSendByte.Count)
-        System.Threading.Thread.Sleep(50)
+        Dim waitMs = CInt((allSendByte.Count * 1000) / (Me.oSerialPort.BaudRate / 8) * 1.5) + 20
+        System.Threading.Thread.Sleep(waitMs)
     End Sub
 
     Private Sub btnSend_Click(sender As Object, e As EventArgs) Handles btnSend.Click

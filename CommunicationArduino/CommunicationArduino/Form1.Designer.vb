@@ -23,7 +23,6 @@ Partial Class frmMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.btnOpenClose = New System.Windows.Forms.Button()
-        Me.tbxPort = New System.Windows.Forms.TextBox()
         Me.tbxSendMessage = New System.Windows.Forms.TextBox()
         Me.btnSend = New System.Windows.Forms.Button()
         Me.btnColorPick = New System.Windows.Forms.Button()
@@ -32,6 +31,7 @@ Partial Class frmMain
         Me.trkR = New System.Windows.Forms.TrackBar()
         Me.trkG = New System.Windows.Forms.TrackBar()
         Me.trkB = New System.Windows.Forms.TrackBar()
+        Me.cbxPort = New System.Windows.Forms.ComboBox()
         CType(Me.trkBar, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.trkR, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.trkG, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -46,13 +46,6 @@ Partial Class frmMain
         Me.btnOpenClose.TabIndex = 0
         Me.btnOpenClose.Text = "Open"
         Me.btnOpenClose.UseVisualStyleBackColor = True
-        '
-        'tbxPort
-        '
-        Me.tbxPort.Location = New System.Drawing.Point(12, 12)
-        Me.tbxPort.Name = "tbxPort"
-        Me.tbxPort.Size = New System.Drawing.Size(179, 19)
-        Me.tbxPort.TabIndex = 1
         '
         'tbxSendMessage
         '
@@ -125,11 +118,20 @@ Partial Class frmMain
         Me.trkB.TabIndex = 6
         Me.trkB.Value = 128
         '
+        'cbxPort
+        '
+        Me.cbxPort.FormattingEnabled = True
+        Me.cbxPort.Location = New System.Drawing.Point(12, 12)
+        Me.cbxPort.Name = "cbxPort"
+        Me.cbxPort.Size = New System.Drawing.Size(179, 20)
+        Me.cbxPort.TabIndex = 8
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(455, 299)
+        Me.Controls.Add(Me.cbxPort)
         Me.Controls.Add(Me.btnTest)
         Me.Controls.Add(Me.trkB)
         Me.Controls.Add(Me.trkG)
@@ -138,7 +140,6 @@ Partial Class frmMain
         Me.Controls.Add(Me.btnColorPick)
         Me.Controls.Add(Me.btnSend)
         Me.Controls.Add(Me.tbxSendMessage)
-        Me.Controls.Add(Me.tbxPort)
         Me.Controls.Add(Me.btnOpenClose)
         Me.Name = "frmMain"
         Me.Text = "Form1"
@@ -152,7 +153,6 @@ Partial Class frmMain
     End Sub
 
     Friend WithEvents btnOpenClose As Button
-    Friend WithEvents tbxPort As TextBox
     Friend WithEvents tbxSendMessage As TextBox
     Friend WithEvents btnSend As Button
     Friend WithEvents btnColorPick As Button
@@ -161,4 +161,5 @@ Partial Class frmMain
     Friend WithEvents trkR As TrackBar
     Friend WithEvents trkG As TrackBar
     Friend WithEvents trkB As TrackBar
+    Friend WithEvents cbxPort As ComboBox
 End Class

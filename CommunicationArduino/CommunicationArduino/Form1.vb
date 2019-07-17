@@ -23,12 +23,52 @@ Public Class frmMain
             Console.WriteLine("{0}", portName)
         Next
         If ports.Length <> 0 Then
-            Me.tbxPort.Text = String.Format("{0}", ports(0))
+            For Each p In ports
+                Me.cbxPort.Items.Add(String.Format("{0}", ports(0)))
+            Next
+            Me.cbxPort.SelectedIndex = 0
         End If
     End Sub
 
     Private Sub frmMain_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
         CloseProcess()
+    End Sub
+
+    Private Sub CloseProcess()
+        If oSerialPort.IsOpen Then
+            'thread stop
+            myThread.Abort()
+
+            System.Threading.Thread.Sleep(100)
+
+            'close
+            oSerialPort.Close()
+        End If
+    End Sub
+
+    Private Sub btnOpenClose_Click(sender As Object, e As EventArgs) Handles btnOpenClose.Click
+        If oSerialPort.IsOpen Then
+            CloseProcess()
+            Me.btnOpenClose.Text = "Open"
+            Return
+        Else
+            Me.btnOpenClose.Text = "Close"
+        End If
+
+        Try
+            Me.oSerialPort.PortName = Me.cbxPort.SelectedItem.ToString
+            Me.oSerialPort.Open()
+
+            'thread start
+            Me.myThread = New Thread(AddressOf threadFunc)
+            Me.myThread.IsBackground = True
+            Thread.Sleep(500)
+            Me.myThread.Start()
+            Thread.Sleep(500)
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
     End Sub
 
     Private _lock = New Object
@@ -115,12 +155,6 @@ Public Class frmMain
         End While
     End Sub
 
-    Private Sub Button3_Click(sender As Object, e As EventArgs)
-        If oSerialPort.IsOpen = True Then
-            oSerialPort.Close()
-        End If
-    End Sub
-
     ''' <summary>
     ''' データ送信
     ''' 先頭 符号なし2byte分のチェックサムを付与
@@ -155,42 +189,6 @@ Public Class frmMain
         'write
         oSerialPort.Write(allSendByte.ToArray, 0, allSendByte.Count)
         System.Threading.Thread.Sleep(50)
-    End Sub
-
-    Private Sub CloseProcess()
-        If oSerialPort.IsOpen Then
-            'thread stop
-            myThread.Abort()
-
-            System.Threading.Thread.Sleep(100)
-
-            'close
-            oSerialPort.Close()
-        End If
-    End Sub
-
-    Private Sub btnOpenClose_Click(sender As Object, e As EventArgs) Handles btnOpenClose.Click
-        If oSerialPort.IsOpen Then
-            CloseProcess()
-            Me.btnOpenClose.Text = "Open"
-        Else
-            Me.btnOpenClose.Text = "Close"
-        End If
-
-        Try
-            Me.oSerialPort.PortName = Me.tbxPort.Text
-            Me.oSerialPort.Open()
-
-            'thread start
-            Me.myThread = New Thread(AddressOf threadFunc)
-            Me.myThread.IsBackground = True
-            Thread.Sleep(500)
-            Me.myThread.Start()
-            Thread.Sleep(500)
-
-        Catch ex As Exception
-            MessageBox.Show(ex.Message)
-        End Try
     End Sub
 
     Private Sub btnSend_Click(sender As Object, e As EventArgs) Handles btnSend.Click

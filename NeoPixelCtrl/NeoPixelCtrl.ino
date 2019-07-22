@@ -11,7 +11,7 @@
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 //232C control
-#define BAUDRATE 9600
+#define BAUDRATE 9600 //9600 115200
 
 //func
 void Clear();

@@ -12,7 +12,7 @@ Public Class frmMain
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         AllocConsole()
         oSerialPort = New SerialPort()
-        oSerialPort.BaudRate = 9600
+        oSerialPort.BaudRate = 9600 '9600
         oSerialPort.StopBits = StopBits.One
         oSerialPort.RtsEnable = False
         oSerialPort.DataBits = 8
@@ -321,4 +321,27 @@ Public Class frmMain
         TarckBarCtrl(3, Me.trkB.Value)
     End Sub
 
+    Private Sub btnDemo_Click(sender As Object, e As EventArgs) Handles btnDemo.Click
+
+        For r As Integer = 0 To 255 Step 16
+            For g As Integer = 0 To 255 Step 32
+                For b As Integer = 0 To 255 Step 64
+                    _sendData.Clear()
+                    _sendData.Add(64)
+                    _sendData.Add(0)
+                    _sendData.Add(r)
+                    _sendData.Add(g)
+                    _sendData.Add(b)
+                    _sendData.Add(1)
+                    _sendData.Add(r)
+                    _sendData.Add(g)
+                    _sendData.Add(b)
+                    Me.SendArduinoWithCheckSum()
+                    Application.DoEvents()
+                Next
+            Next
+        Next
+
+        'SendArduinoWithCheckSum()
+    End Sub
 End Class

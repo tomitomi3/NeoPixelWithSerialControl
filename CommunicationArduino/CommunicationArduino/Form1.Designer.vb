@@ -32,6 +32,7 @@ Partial Class frmMain
         Me.trkG = New System.Windows.Forms.TrackBar()
         Me.trkB = New System.Windows.Forms.TrackBar()
         Me.cbxPort = New System.Windows.Forms.ComboBox()
+        Me.btnDemo = New System.Windows.Forms.Button()
         CType(Me.trkBar, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.trkR, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.trkG, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -126,11 +127,21 @@ Partial Class frmMain
         Me.cbxPort.Size = New System.Drawing.Size(179, 20)
         Me.cbxPort.TabIndex = 8
         '
+        'btnDemo
+        '
+        Me.btnDemo.Location = New System.Drawing.Point(359, 86)
+        Me.btnDemo.Name = "btnDemo"
+        Me.btnDemo.Size = New System.Drawing.Size(75, 23)
+        Me.btnDemo.TabIndex = 9
+        Me.btnDemo.Text = "Button1"
+        Me.btnDemo.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(455, 299)
+        Me.Controls.Add(Me.btnDemo)
         Me.Controls.Add(Me.cbxPort)
         Me.Controls.Add(Me.btnTest)
         Me.Controls.Add(Me.trkB)
@@ -162,4 +173,5 @@ Partial Class frmMain
     Friend WithEvents trkG As TrackBar
     Friend WithEvents trkB As TrackBar
     Friend WithEvents cbxPort As ComboBox
+    Friend WithEvents btnDemo As Button
 End Class

@@ -52,13 +52,13 @@ Partial Class frmMain
         '
         Me.tbxSendMessage.Location = New System.Drawing.Point(12, 49)
         Me.tbxSendMessage.Name = "tbxSendMessage"
-        Me.tbxSendMessage.Size = New System.Drawing.Size(179, 19)
+        Me.tbxSendMessage.Size = New System.Drawing.Size(341, 19)
         Me.tbxSendMessage.TabIndex = 2
         Me.tbxSendMessage.Text = "32,0,0,64,0,1,0,0,32"
         '
         'btnSend
         '
-        Me.btnSend.Location = New System.Drawing.Point(197, 47)
+        Me.btnSend.Location = New System.Drawing.Point(377, 47)
         Me.btnSend.Name = "btnSend"
         Me.btnSend.Size = New System.Drawing.Size(75, 23)
         Me.btnSend.TabIndex = 3
@@ -67,7 +67,7 @@ Partial Class frmMain
         '
         'btnColorPick
         '
-        Me.btnColorPick.Location = New System.Drawing.Point(278, 47)
+        Me.btnColorPick.Location = New System.Drawing.Point(458, 47)
         Me.btnColorPick.Name = "btnColorPick"
         Me.btnColorPick.Size = New System.Drawing.Size(75, 23)
         Me.btnColorPick.TabIndex = 5
@@ -85,7 +85,7 @@ Partial Class frmMain
         '
         'btnTest
         '
-        Me.btnTest.Location = New System.Drawing.Point(359, 47)
+        Me.btnTest.Location = New System.Drawing.Point(539, 47)
         Me.btnTest.Name = "btnTest"
         Me.btnTest.Size = New System.Drawing.Size(75, 23)
         Me.btnTest.TabIndex = 7
@@ -129,7 +129,7 @@ Partial Class frmMain
         '
         'btnDemo
         '
-        Me.btnDemo.Location = New System.Drawing.Point(359, 86)
+        Me.btnDemo.Location = New System.Drawing.Point(539, 86)
         Me.btnDemo.Name = "btnDemo"
         Me.btnDemo.Size = New System.Drawing.Size(75, 23)
         Me.btnDemo.TabIndex = 9
@@ -140,7 +140,7 @@ Partial Class frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(455, 299)
+        Me.ClientSize = New System.Drawing.Size(640, 299)
         Me.Controls.Add(Me.btnDemo)
         Me.Controls.Add(Me.cbxPort)
         Me.Controls.Add(Me.btnTest)

@@ -10,7 +10,7 @@
 #define NUMPIXELS 2
 Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
-//232C control
+//UART 232C control
 #define BAUDRATE 9600 //9600 115200
 
 //func
@@ -22,8 +22,11 @@ void DebugBlink(unsigned int num);
 byte    rcvData[RCV_SIZE];
 #define RCV_LOOP (RCV_SIZE*1000)/(BAUDRATE/8)*1.5 //RCV_SIZE 受信するのにかかる時間
 bool    oneShot = false;
-//protocol
-//[CHECKSUM1][CHECKSUM2][BRIGHTNESS][CH1][CH1R][CH1G][CH1B][CH2][CH2R][CH2G][CH2B]...
+
+//Protocol
+// [CHECKSUM1][CHECKSUM2][BRIGHTNESS][CH1][CH1R][CH1G][CH1B][CH2][CH2R][CH2G][CH2B]...
+// [0]        [1]        [2]         [3]  [4]   [5]   [6]   [CHINDEX*2]...
+#define CHINDEX 3
 
 //--------------------------------------------------------------------
 //Setup()
@@ -36,22 +39,26 @@ void setup() {
   pixels.begin();
 
   //debug
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT); //for arudino UNO
+  pinMode(LED_BUILTIN, PIN);
 }
 
 //--------------------------------------------------------------------
 //loop()
 //--------------------------------------------------------------------
-void loop() {
-  //all off
+void ResetPixel()
+{
   pixels.clear();
-
-  //reset
   for ( int i = 0; i < NUMPIXELS; i++)
   {
     pixels.setPixelColor(i, pixels.Color(0, 0, 0));
   }
   pixels.show();
+
+}
+
+void loop() {
+  ResetPixel();
 
   //serial
   while (1)
@@ -79,7 +86,7 @@ void loop() {
             byte temp  = Serial.read();
             rcvData[readCount] = temp;
 
-            //2バイト移行を加算
+            //受信先頭2バイトはチェックサム
             if (readCount >= 2)
             {
               chkSumRcv += temp;
@@ -95,50 +102,41 @@ void loop() {
         }
       }
 
-      //debug
-      /*
-        delay(500);
-        DebugBlink(rcvSumSize);
-        delay(500);
-        DebugBlink(chkSum);
-        delay(1000);
-      */
-
       //checksum確認 加算して0であればOK
-      unsigned char flg = 0;
       chkSumRcv +=  (rcvData[1] << 8) | rcvData[0];
       if ( chkSumRcv == 0)
       {
-        //debug
-        DebugBlink(1);
-
         //to NeoPixel
         pixels.setBrightness(rcvData[2]);
 
-        int chIndex = 3;
+        //ctrl
+        int index = CHINDEX;
         for ( int i = 0; i < NUMPIXELS; i++)
         {
-          pixels.setPixelColor(rcvData[chIndex], pixels.Color(rcvData[chIndex + 1], rcvData[chIndex + 2], rcvData[chIndex + 3])); //1
-          chIndex += 4;
+          pixels.setPixelColor(rcvData[index], pixels.Color(rcvData[index + 1], rcvData[index + 2], rcvData[index + 3]));
+          index += 4;
         }
         pixels.show();
-        flg = 1;
+        
+        //プログラム側でchecksum結果を確認する場合
+        //Serial.write(1);
       }
-
-      //プログラム側でchecksum結果を確認する場合
-      Serial.write(flg);
-      //Serial.flush();
+      else
+      {
+        //プログラム側でchecksum結果を確認する場合
+        //Serial.write(0);
+      }
     }
   }
 }
 
-void DebugBlink(unsigned int num)
+void DebugBlink(int pin, unsigned int num)
 {
   for (int i = 0; i < num; i++)
   {
-    digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(pin, HIGH);
     delay(50);
-    digitalWrite(LED_BUILTIN, LOW);
+    digitalWrite(pin, LOW);
     delay(50);
   }
 }

@@ -24,7 +24,7 @@ Public Class frmMain
         Next
         If ports.Length <> 0 Then
             For Each p In ports
-                Me.cbxPort.Items.Add(String.Format("{0}", ports(0)))
+                Me.cbxPort.Items.Add(String.Format("{0}", p))
             Next
             Me.cbxPort.SelectedIndex = 0
         End If
